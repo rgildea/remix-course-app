@@ -1,6 +1,5 @@
-import { Outlet } from "@remix-run/react";
-import ExpensesList from "~/components/expenses/ExpensesList";
-import expensesStyles from "~/styles/expenses.css";
+import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
+import Chart from "~/components/expenses/Chart";
 
 const DUMMY_EXPENSES = [
   {
@@ -24,17 +23,12 @@ const DUMMY_EXPENSES = [
   },
 ];
 
-export function links() {
-  return [{ rel: "stylesheet", href: expensesStyles }];
-}
-
-export default function ExpensesLayout() {
+export default function ExpensesAnalysisPage() {
   return (
-    <>
-      <Outlet />
-      <main>
-        <ExpensesList expenses={DUMMY_EXPENSES} />
-      </main>
-    </>
+    <main>
+      <h1>Expenses Analysis</h1>
+      <ExpenseStatistics expenses={DUMMY_EXPENSES} />
+      <Chart expenses={DUMMY_EXPENSES} />
+    </main>
   );
 }
