@@ -2,10 +2,11 @@ import {
   Form,
   Link,
   useActionData,
+  useLoaderData,
   useMatches,
-  useNavigation,
   useParams,
-} from "@remix-run/react";
+  useTransition as useNavigation,
+} from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
@@ -14,11 +15,16 @@ function ExpenseForm() {
   const params = useParams();
   const matches = useMatches();
   const expenses = matches.find(
-    (match) => match.id === "routes/__app/expenses"
+    (match) => match.id === 'routes/__app/expenses'
   ).data;
   const expenseData = expenses.find((expense) => expense.id === params.id);
+
+  if (params.id && !expenseData) {
+    // throw new Response();
+    return <p>Invalid expense id.</p>;
+  }
+
   const navigation = useNavigation();
-  const isSubmitting = navigation.state !== "idle";
 
   const defaultValues = expenseData
     ? {
@@ -27,25 +33,28 @@ function ExpenseForm() {
         date: expenseData.date,
       }
     : {
-        title: "",
-        amount: "",
-        date: "",
+        title: '',
+        amount: '',
+        date: '',
       };
+
+  const isSubmitting = navigation.state !== 'idle';
 
   // const submit = useSubmit();
 
   // function submitHandler(event) {
   //   event.preventDefault();
-  //   //perform validation
+  //   // perform your own validation
   //   // ...
   //   submit(event.target, {
-  //     method: "post",
+  //     // action: '/expenses/add',
+  //     method: 'post',
   //   });
   // }
 
   return (
     <Form
-      method={expenseData ? "patch" : "put"}
+      method={expenseData ? 'patch' : 'post'}
       className="form"
       id="expense-form"
       // onSubmit={submitHandler}
@@ -84,7 +93,7 @@ function ExpenseForm() {
             max={today}
             required
             defaultValue={
-              defaultValues.date ? defaultValues.date.slice(0, 10) : ""
+              defaultValues.date ? defaultValues.date.slice(0, 10) : ''
             }
           />
         </p>
@@ -98,7 +107,7 @@ function ExpenseForm() {
       )}
       <div className="form-actions">
         <button disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Expense"}
+          {isSubmitting ? 'Saving...' : 'Save Expense'}
         </button>
         <Link to="..">Cancel</Link>
       </div>
