@@ -1,8 +1,10 @@
-import { NavLink } from '@remix-run/react';
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
 
-import Logo from '../util/Logo';
+import Logo from "../util/Logo";
 
 function ExpensesHeader() {
+  const userId = useLoaderData();
+  console.log("gooey");
   return (
     <header id="main-header">
       <Logo />
@@ -19,7 +21,20 @@ function ExpensesHeader() {
         </ul>
       </nav>
       <nav id="cta-nav">
-        <button className="cta">Logout</button>
+        <ul>
+          <li>
+            {userId && (
+              <form method="post" action="/logout" id="logout-form">
+                <button className="cta-alt">GOoble Logout</button>
+              </form>
+            )}
+            {!userId && (
+              <Link to="/auth" className="cta">
+                Login
+              </Link>
+            )}
+          </li>
+        </ul>
       </nav>
     </header>
   );
