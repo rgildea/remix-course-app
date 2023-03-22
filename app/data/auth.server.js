@@ -19,7 +19,7 @@ async function createUserSession(userId, redirectPath) {
   session.set("userId", userId);
   return redirect(redirectPath, {
     headers: {
-      "Set-Cookie": sessionStorage.commitSession(session),
+      "Set-Cookie": await sessionStorage.commitSession(session),
     },
   });
 }
