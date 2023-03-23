@@ -40,19 +40,7 @@ export default function ExpensesLayout() {
 }
 
 export async function loader({ request }) {
-  await requireUserSession(request);
-
-  const expenses = await getExpenses();
+  const userId = await requireUserSession(request);
+  const expenses = await getExpenses(userId);
   return expenses;
-
-  // if (!expenses || expenses.length === 0) {
-  //   throw json(
-  //     { message: 'Could not find any expenses.' },
-  //     { status: 404, statusText: 'No expenses found' }
-  //   );
-  // }
 }
-
-// export function CatchBoundary() {
-//   return <p>Error</p>
-// }
